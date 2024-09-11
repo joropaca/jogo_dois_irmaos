@@ -6,6 +6,109 @@
     "entities": [
     
   
+      
+      
+      {
+        "type": "bloco",
+        "x": 1000,
+        "y": 580,
+        "width": 124,
+        "height": 131,
+        "image": "image/bloco_agua.png",
+        "texto": "Venda de produtos coloniais locais",
+        "fonte": "fonte.ttf"
+      },
+      {
+        "type": "bloco",
+        "x": 1600,
+        "y": 580,
+        "width": 124,
+        "height": 131,
+        "image": "image/bloco_agua.png",
+        "texto": "Venda de produtos coloniais locais",
+        "fonte": "fonte.ttf"
+      },
+      {
+        "type": "bloco",
+        "x": 2200,
+        "y": 580,
+        "width": 124,
+        "height": 131,
+        "image": "image/bloco_agua.png",
+        "texto": "baixa qualidade das águas",
+        "fonte": "fonte.ttf"
+      },
+      {
+        "type": "bloco",
+        "x": 2800,
+        "y": 580,
+        "width": 124,
+        "height": 131,
+        "image": "image/bloco_agua.png",
+        "texto": "mau uso do solo e desmatamento",
+        "fonte": "fonte.ttf"
+      },
+      {
+        "type": "bloco",
+        "x": 3400,
+        "y": 580,
+        "width": 124,
+        "height": 131,
+        "image": "image/bloco_agua.png",
+        "texto": "A escassez crescente de água",
+        "fonte": "fonte.ttf"
+      },
+      {
+        "type": "bloco",
+        "x": 4000,
+        "y": 580,
+        "width": 124,
+        "height": 131,
+        "image": "image/bloco_agua.png",
+        "texto": "Como está a poluição no rio dos sinos",
+        "fonte": "fonte.ttf"
+      },
+      {
+        "type": "bloco",
+        "x": 4600,
+        "y": 580,
+        "width": 124,
+        "height": 131,
+        "image": "image/bloco_agua.png",
+        "texto": "Despejo de esgoto",
+        "fonte": "fonte.ttf"
+      },
+      {
+        "type": "bloco",
+        "x": 5200,
+        "y": 580,
+        "width": 124,
+        "height": 131,
+        "image": "image/bloco_agua.png",
+        "texto": "Curiosidades",
+        "fonte": "fonte.ttf"
+      },
+  
+      {
+        "type": "nextlevel",
+        "x": 5800,
+        "y": 1010,
+        "hitbox_height": -10,
+        "hitbox_y": 20,      
+        "width": 310,
+        "height": 360,
+        "prescale": 0.5,
+        "level": "praca.json"
+      },  
+      {
+        "type": "overlay",
+        "x": 0,
+        "y": 0,
+        "width": 1000,
+        "height": 376,
+        "tempo": 100,
+        "image": "image/vale.png"
+      },
       {
         "type": "personagem",
         "x": 384,
@@ -19,102 +122,8 @@
         "frames_dir": "image/mario_frames/",
         "speed": 5,
         "jump_strength": -20
-      },
+      }
       
-      {
-        "type": "bloco",
-        "x": 400,
-        "y": 580,
-        "width": 400,
-        "height": 200,
-        "image": "image/bloco_agua.png",
-        "texto": "Venda de produtos coloniais locais",
-        "fonte": "fonte.ttf"
-      },
-      {
-        "type": "bloco",
-        "x": 1000,
-        "y": 580,
-        "width": 400,
-        "height": 200,
-        "image": "image/bloco_agua.png",
-        "texto": "Venda de produtos coloniais locais",
-        "fonte": "fonte.ttf"
-      },
-      {
-        "type": "bloco",
-        "x": 1600,
-        "y": 580,
-        "width": 400,
-        "height": 200,
-        "image": "image/bloco_agua.png",
-        "texto": "baixa qualidade das águas",
-        "fonte": "fonte.ttf"
-      },
-      {
-        "type": "bloco",
-        "x": 2200,
-        "y": 580,
-        "width": 400,
-        "height": 200,
-        "image": "image/bloco_agua.png",
-        "texto": "mau uso do solo e desmatamento",
-        "fonte": "fonte.ttf"
-      },
-      {
-        "type": "bloco",
-        "x": 1800,
-        "y": 580,
-        "width": 400,
-        "height": 200,
-        "image": "image/bloco_agua.png",
-        "texto": "A escassez crescente de água",
-        "fonte": "fonte.ttf"
-      },
-      {
-        "type": "bloco",
-        "x": 2200,
-        "y": 580,
-        "width": 400,
-        "height": 200,
-        "image": "image/bloco_agua.png",
-        "texto": "Como está a poluição no rio dos sinos",
-        "fonte": "fonte.ttf"
-      },
-      {
-        "type": "bloco",
-        "x": 2800,
-        "y": 580,
-        "width": 400,
-        "height": 200,
-        "image": "image/bloco_agua.png",
-        "texto": "Despejo de esgoto",
-        "fonte": "fonte.ttf"
-      },
-      {
-        "type": "bloco",
-        "x": 3400,
-        "y": 580,
-        "width": 400,
-        "height": 200,
-        "image": "image/bloco_agua.png",
-        "texto": "Curiosidades",
-        "fonte": "fonte.ttf"
-      },
-  
-      {
-        "type": "nextlevel",
-        "x": 3200,
-        "y": 1010,
-        "hitbox_height": -10,
-        "hitbox_y": 20,      
-        "width": 310,
-        "height": 360,
-        "prescale": 0.5,
-        "level": "praca.json"
-      }    
-  
-  
   
     ]
   }

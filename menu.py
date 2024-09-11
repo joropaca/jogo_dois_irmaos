@@ -28,12 +28,12 @@ efeito_sair = pygame.mixer.Sound('sons/sair.mp3')  # Substitua pelo caminho do s
 efeito_navegacao = pygame.mixer.Sound('sons/play.mp3')
 
 # Carregar imagem de fundo
-fundo = pygame.image.load('image/fundo.png')
+fundo = pygame.image.load('image/fundo_menu.png')
 fundo = pygame.transform.scale(fundo, (largura_tela, altura_tela))
 
 # Carregar imagem do t�tulo
 imagem_titulo = pygame.image.load('image/corede.png')  # Substitua pelo caminho da sua imagem
-imagem_titulo = pygame.transform.scale(imagem_titulo, (600, 150))  # Ajuste o tamanho conforme necess�rio
+imagem_titulo = pygame.transform.scale(imagem_titulo, (1000, 250))  # Ajuste o tamanho conforme necess�rio
 
 # Carregar imagem dos bot�es
 imagem_iniciar = pygame.image.load('image/start.png')  # Substitua pelo caminho da sua imagem

@@ -45,11 +45,21 @@ def carrega_frames_dir(frames_dir, width, height):
         pygame.quit()
         sys.exit()
 
+# Defina o diretório onde suas imagens de explosão estão localizadas
+frames_dir = "C:/Users/visita/Desktop/jogo_2/image/decoracao_fabrica"
+frame_width = 64  # Largura desejada do frame
+frame_height = 64  # Altura desejada do frame
+
+# Carregar os frames da explosão
+explosion_frames = carrega_frames_dir(frames_dir, frame_width, frame_height)
+
 def random_se_list(valor):
     if isinstance(valor, list):
         return random.uniform(valor[0], valor[1])
     return valor
 
+plane_img = pygame.image.load("plane.png")
+bomb_img = pygame.image.load("bomb.png")
 
 class Entidade:
     hitbox_offset = pygame.Rect(0, 0, 0, 0)
@@ -419,9 +429,76 @@ class OverlayTransparente(Entidade):
         pass
 
 
+
+class Plane(Entidade):
+    def __init__(self):
+        super().__init__()
+        self.image = pygame.image.load("plane.img") 
+        self.rect = self.image.get_rect(center=(100, 100))
+        self.speed_x = 5
+        self.dropped_bomb = False
+
+    def update(self):
+        global entidades
+
+        self.rect.x += self.speed_x
+
+        if self.rect.x < 500 and not self.dropped_bomb:
+            self.dropped_bomb = True
+            entidades.append(Bomb(self.rect.centerx, self.rect.bottom))
+    
+        if self.rect.right > 800:
+            self.rect.left = 0
+            self.dropped_bomb = False  
+
+    def drop_bomb(self):
+        if not self.dropped_bomb:
+            self.dropped_bomb = True
+            return Bomb(self.rect.centerx, self.rect.bottom)
+        return None
+
+class Bomb(Entidade):
+    def __init__(self, x, y):
+        super().__init__()
+        self.image = pygame.image.load("bomb.png")
+        self.rect = self.image.get_rect(center=(x, y))
+        self.speed_y = 5
+        self.exploded = False
+
+    def update(self):
+        if not self.exploded:
+            self.rect.y += self.speed_y
+
+            if self.rect.bottom >= 600:
+                self.explode()
+
+    def explode(self):
+        self.exploded = True
+        return Explosion(self.rect.centerx, self.rect.centery)
+
+class Explosion(Entidade):
+    def __init__(self, x, y):
+        super().__init__()
+        self.frames = explosion_frames  # Certifique-se de que explosion_frames é uma lista de imagens carregadas
+        self.current_frame = 0
+        self.image = self.frames[self.current_frame]
+        self.rect = self.image.get_rect(center=(x, y))
+        self.frame_delay = 100
+        self.last_frame_time = pygame.time.get_ticks()
+
+    def update(self):
+        current_time = pygame.time.get_ticks()
+        if current_time - self.last_frame_time > self.frame_delay:
+            self.current_frame += 1
+            if self.current_frame < len(self.frames):
+                self.image = self.frames[self.current_frame]
+                self.last_frame_time = current_time
+            else:
+                self.kill()
+
+
 class NextLevel(Entidade):
     level = ""
-    
     def __init__(self, x, y, width, height, level):
         
         imagem_tubo = "image/cano.png"
@@ -447,7 +524,7 @@ class NextLevel(Entidade):
         pass
 
 def carrega_nivel(arquivo):
-    global entidades, chao_img, cor_fundo, camera_x, camera_y, fundo_img, fonte
+    global entidades, chao_img, cor_fundo, camera_x, camera_y, fundo_img, fonte, explosion_frames
     camera_x = 0
     camera_y = 0    
     # Abre arquivo json do mapa
@@ -463,7 +540,7 @@ def carrega_nivel(arquivo):
     
     # Carrega a fonte pixelada
     fonte_ttf = level["fonte"] if "fonte" in level else None
-    fonte = pygame.font.Font(fonte_ttf, 24)  # 24 é o tamanho da fonte
+    fonte = pygame.font.Font(fonte_ttf, 50)  # 24 é o tamanho da fonte
 
     cor_fundo = level["cor_fundo"]
     cor_fundo = (cor_fundo[0] or 135, cor_fundo[1] or 206, cor_fundo[2] or 235)

@@ -2,15 +2,45 @@
   "fonte": "fonte.ttf",
   "chao": "image/chao_fabrica.png",
   "cor_fundo": [235, 206, 135],
-  "imagem_fundo": "image/fundo_fabrica.png",
   "entities": [
-  
+    
+    {
+      "type": "Plane",
+      "x": [0, 1920],
+      "y": [0, 360],
+      "width": 960,
+      "height": 950,
+      "speed": [1, 3],
+      "respawn": true,
+      "image": "image/decoracao_fabrica/plane.png"
+    }, 
+    {
+      "type": "Bomb",
+      "x": [0, 1920],
+      "y": [0, 360],
+      "width": 960,
+      "height": 950,
+      "speed": [1, 3],
+      "respawn": true,
+      "image": "image/decoracao_fabrica/bomb.png"
+
+    },
+    {
+      "type": "Explosion",
+      "x": [0, 1920],
+      "y": [0, 360],
+      "width": 960,
+      "height": 950,
+      "speed": [1, 3],
+      "respawn": true,
+      "image": "image/decoracao_fabrica/explosion"
+    },
     {
       "type": "bloco",
       "x": 1000,
       "y": 580,
-      "width": 192,
-      "height": 167,
+      "width": 124,
+      "height": 131,
       "image": "image/bloco_fabrica.png",
       "texto": "PIB: R$ 37,6 bilhões, em 2012",
       "fonte": "fonte.ttf"
@@ -19,8 +49,8 @@
       "type": "bloco",
       "x": 1600,
       "y": 580,
-      "width": 192,
-      "height": 167,
+      "width": 124,
+      "height": 131,
       "image": "image/bloco_fabrica.png",
       "texto": "PIB per capita era de R$ 28.848,00",
       "fonte": "fonte.ttf"
@@ -29,8 +59,8 @@
       "type": "bloco",
       "x": 2200,
       "y": 580,
-      "width": 192,
-      "height": 167,
+      "width": 124,
+      "height": 131,
       "image": "image/bloco_fabrica.png",
       "texto": "Setores industriais",
       "fonte": "fonte.ttf"
@@ -39,8 +69,8 @@
       "type": "bloco",
       "x": 2800,
       "y": 580,
-      "width": 192,
-      "height": 167,
+      "width": 124,
+      "height": 131,
       "image": "image/bloco_fabrica.png",
       "texto": "Setor calçadista",
       "fonte": "fonte.ttf"
