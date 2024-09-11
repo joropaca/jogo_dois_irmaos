@@ -1,5 +1,5 @@
 {
-  "cor": [135,206,235],
+  "cor": [135, 206, 235],
   "fonte": "fonte.ttf",
   "chao": "image/grama.png",
   "cor_fundo": [135, 206, 235],
@@ -43,7 +43,7 @@
       "speed": [1, 3],
       "respawn": true,
       "image": "image/bird"
-    },    
+    },
     {
       "type": "decoracao",
       "x": [0, 1920],
@@ -53,7 +53,7 @@
       "speed": [1, 3],
       "respawn": true,
       "image": "image/bird"
-    },    
+    },
     {
       "type": "decoracao",
       "x": [0, 1920],
@@ -63,8 +63,8 @@
       "speed": [1, 3],
       "respawn": true,
       "image": "image/bird"
-    },    
-    
+    },
+
     {
       "type": "parallax",
       "x": 800,
@@ -74,18 +74,17 @@
       "layer": 0.8,
       "image": "image/2brothers/banheiros.png"
     },
- 
+
     {
       "type": "parallax",
       "x": 800,
       "y": 1150,
       "width": 419,
       "height": 1606,
-      "prescale": 0.20,
-      "layer": 0.90,
+      "prescale": 0.2,
+      "layer": 0.9,
       "image": "image/2brothers/sicredi.png"
     },
-
 
     {
       "type": "parallax",
@@ -93,7 +92,7 @@
       "y": 1050,
       "width": 907,
       "height": 808,
-      "prescale": 0.40,
+      "prescale": 0.4,
       "layer": 0.95,
       "image": "image/2brothers/casinha_frente.png"
     },
@@ -109,8 +108,6 @@
       "image": "image/2brothers/casinha_frente.png"
     },
 
-   
-
     {
       "type": "parallax",
       "x": 1000,
@@ -120,7 +117,7 @@
       "layer": 0.9,
       "image": "image/2brothers/estatua.png"
     },
- 
+
     {
       "type": "bloco",
       "x": -400,
@@ -154,7 +151,6 @@
       "fonte": "fonte.ttf"
     },
 
-    
     {
       "type": "bloco",
       "x": 1600,
@@ -166,7 +162,6 @@
       "fonte": "fonte.ttf"
     },
 
-    
     {
       "type": "bloco",
       "x": 2200,
@@ -178,7 +173,6 @@
       "fonte": "fonte.ttf"
     },
 
-    
     {
       "type": "bloco",
       "x": 2800,
@@ -195,7 +189,7 @@
       "x": 3200,
       "y": 1010,
       "hitbox_height": -10,
-      "hitbox_y": 20,      
+      "hitbox_y": 20,
       "width": 310,
       "height": 360,
       "prescale": 0.5,
@@ -216,7 +210,7 @@
       "speed": 5,
       "jump_strength": -20
     },
-  
+
     {
       "type": "parallax",
       "x": 500,
@@ -235,7 +229,5 @@
       "layer": 8,
       "image": "image/2brothers/cachorro_bola.png"
     }
-    
-
   ]
 }

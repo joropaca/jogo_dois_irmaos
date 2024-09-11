@@ -291,6 +291,7 @@ class Bloco(Entidade):
     def render_multi_line(self, text):
         imagens = []
         lines = text.splitlines()
+        
         for i, linha in enumerate(lines):
             imagens.append(fonte.render(linha, True, cor_texto))
 
@@ -429,7 +430,7 @@ def carrega_nivel(arquivo):
         fundo_img = carrega_imagem_escalada(fundo_img, SCREEN_WIDTH, SCREEN_HEIGHT)
     
     # Carrega a fonte pixelada
-    fonte_ttf = level["fonte"] if "fonte" in level else "fonte.ttf"    
+    fonte_ttf = level["fonte"] if "fonte" in level else None
     fonte = pygame.font.Font(fonte_ttf, 24)  # 24 é o tamanho da fonte
 
     cor_fundo = level["cor_fundo"]
