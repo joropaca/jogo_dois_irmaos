@@ -401,8 +401,8 @@ class OverlayTransparente(Entidade):
     def update(self):
         super().update()
 
-        if tempo > 0:
-            tempo -= 1
+        if self.tempo > 0:
+            self.tempo -= 1
         pass
 
     def draw(self, screen):

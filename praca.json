@@ -228,6 +228,15 @@
       "height": 934,
       "layer": 8,
       "image": "image/2brothers/cachorro_bola.png"
+    },
+    {
+      "type": "overlay",
+      "x": 0,
+      "y": 0,
+      "width": 1920,
+      "height": 1080,
+      "tempo": 100,
+      "image": "image/2brothers/cachorro_bola.png"
     }
   ]
 }
