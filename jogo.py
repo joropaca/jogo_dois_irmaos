@@ -387,6 +387,38 @@ class Parallax(Entidade):
     def draw_postprocess(self, screen):
         pass
 
+
+class OverlayTransparente(Entidade):
+    tempo = 0    
+    fadestart = 0
+
+    def __init__(self, x, y, width, height, image, tempo):
+        super().__init__(x, y, width, height, image)
+        self.collides = False
+        self.tempo = tempo
+        self.fadestart = tempo * 0.2
+
+    def update(self):
+        super().update()
+
+        if tempo > 0:
+            tempo -= 1
+        pass
+
+    def draw(self, screen):
+        pass
+
+    def draw_postprocess(self, screen):
+        if self.tempo > 0:
+            if self.tempo < self.fadestart:
+                #calcula a transparencia
+                alpha = 255 * (self.tempo / self.fadestart)
+                self.image.set_alpha(alpha)
+
+            screen.blit(self.image, (self.x, self.y))
+        pass
+
+
 class NextLevel(Entidade):
     level = ""
     
@@ -476,8 +508,10 @@ def carrega_nivel(arquivo):
 
 
             case "bloco":                
-                
                 entidades.append(Bloco(x, y, width, height, entity["image"], entity["texto"]))
+
+            case "overlay":                
+                entidades.append(OverlayTransparente(x, y, width, height, entity["image"], entity["tempo"]))
             #case  ....
 
     # Closing file
