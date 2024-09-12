@@ -35,9 +35,12 @@ def carrega_imagem_escalada(imagem_path, width = None, height = None):
         pygame.quit()
         sys.exit()
         
-def carrega_frames_dir(frames_dir, width, height):
+def carrega_frames_dir(frames_dir, width = None, height = None):
     try:
         frames = [pygame.image.load(os.path.join(frames_dir, f)) for f in sorted(os.listdir(frames_dir)) if f.endswith('.png')]
+        
+        if width == None or height == None:
+            return frames
         # Redimensionar os quadros do personagem
         return [pygame.transform.scale(frame, (width, height)) for frame in frames]
     except pygame.error as e:
@@ -45,21 +48,12 @@ def carrega_frames_dir(frames_dir, width, height):
         pygame.quit()
         sys.exit()
 
-# Defina o diretório onde suas imagens de explosão estão localizadas
-frames_dir = "C:/Users/visita/Desktop/jogo_2/image/decoracao_fabrica"
-frame_width = 64  # Largura desejada do frame
-frame_height = 64  # Altura desejada do frame
-
-# Carregar os frames da explosão
-explosion_frames = carrega_frames_dir(frames_dir, frame_width, frame_height)
 
 def random_se_list(valor):
     if isinstance(valor, list):
         return random.uniform(valor[0], valor[1])
     return valor
 
-plane_img = pygame.image.load("plane.png")
-bomb_img = pygame.image.load("bomb.png")
 
 class Entidade:
     hitbox_offset = pygame.Rect(0, 0, 0, 0)
@@ -169,6 +163,10 @@ class Entidade:
                 self.current_frame = (self.current_frame + 1) % len(self.frames)
             self.image = self.frames[self.current_frame]
         pass
+
+    def kill(self):
+        global entidades
+        entidades.remove(self)
 
 class Personagem(Entidade):
     animation_timer = 0
@@ -431,70 +429,69 @@ class OverlayTransparente(Entidade):
 
 
 class Plane(Entidade):
-    def __init__(self):
-        super().__init__()
-        self.image = pygame.image.load("plane.img") 
-        self.rect = self.image.get_rect(center=(100, 100))
-        self.speed_x = 5
+
+    def __init__(self, x, y, width, height, image, speed_x, drop_x):
+        super().__init__(x, y, width, height, image)
+        self.speed_x = speed_x
+        self.drop_x = drop_x
         self.dropped_bomb = False
+        self.collides = False
 
     def update(self):
         global entidades
-
-        self.rect.x += self.speed_x
-
-        if self.rect.x < 500 and not self.dropped_bomb:
+        self.x += self.speed_x
+        if self.x < 500 and not self.dropped_bomb:
             self.dropped_bomb = True
-            entidades.append(Bomb(self.rect.centerx, self.rect.bottom))
+            entidades.append(Bomb(self.x, self.y))
     
-        if self.rect.right > 800:
-            self.rect.left = 0
-            self.dropped_bomb = False  
 
-    def drop_bomb(self):
-        if not self.dropped_bomb:
-            self.dropped_bomb = True
-            return Bomb(self.rect.centerx, self.rect.bottom)
-        return None
 
 class Bomb(Entidade):
+
     def __init__(self, x, y):
-        super().__init__()
-        self.image = pygame.image.load("bomb.png")
-        self.rect = self.image.get_rect(center=(x, y))
+ 
+        image = "image/decoracao_fabrica/bomb.png"
+        width = 337 // 5
+        height = 396 // 5
+        super().__init__(x, y, width, height, image)
         self.speed_y = 5
+        self.explode_y = SCREEN_HEIGHT - FLOOR_HEIGHT - height
         self.exploded = False
+        self.collides = False
 
     def update(self):
         if not self.exploded:
-            self.rect.y += self.speed_y
+            gonnaExplode = False
 
-            if self.rect.bottom >= 600:
-                self.explode()
+            #Testar colisoes
+            #if self.has_collision(self.x, self.y + self.speed_y):
+            #    gonnaExplode = True
+                                
+            if self.y > self.explode_y:
+                gonnaExplode = True
+        
+            if gonnaExplode == False:
+                self.y += self.speed_y
+            else:
+                self.exploded = True
+                # cria imagem branca
+                white = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
+                white.fill((255, 255, 255))
 
-    def explode(self):
-        self.exploded = True
-        return Explosion(self.rect.centerx, self.rect.centery)
+                entidades.append(Explosion(self.x, self.y))
+                entidades.append(OverlayTransparente(0,0,1920,1080,white, 100))
+                self.kill()
+        
 
 class Explosion(Entidade):
     def __init__(self, x, y):
-        super().__init__()
-        self.frames = explosion_frames  # Certifique-se de que explosion_frames é uma lista de imagens carregadas
-        self.current_frame = 0
-        self.image = self.frames[self.current_frame]
-        self.rect = self.image.get_rect(center=(x, y))
-        self.frame_delay = 100
-        self.last_frame_time = pygame.time.get_ticks()
+        self.collides = False
+        # Carregar os frames da explosão
+        frame_width = 96  # Largura desejada do frame
+        frame_height = 95  # Altura desejada do frame
+        super().__init__(x, y, frame_width, frame_height, "image/decoracao_fabrica/explosion")
+        #self.end_frame = len(explosion_frames)
 
-    def update(self):
-        current_time = pygame.time.get_ticks()
-        if current_time - self.last_frame_time > self.frame_delay:
-            self.current_frame += 1
-            if self.current_frame < len(self.frames):
-                self.image = self.frames[self.current_frame]
-                self.last_frame_time = current_time
-            else:
-                self.kill()
 
 
 class NextLevel(Entidade):
@@ -587,6 +584,9 @@ def carrega_nivel(arquivo):
             case "bloco":                
                 entidades.append(Bloco(x, y, width, height, entity["image"], entity["texto"]))
 
+            case "plane":                
+                entidades.append(Plane(x, y, width, height, entity["image"], entity["speed_x"], entity["drop_y"]))
+
             case "overlay":                
                 entidades.append(OverlayTransparente(x, y, width, height, entity["image"], entity["tempo"]))
             #case  ....
@@ -625,7 +625,7 @@ pygame.mixer.music.set_volume(0.5)  # Ajuste o volume (0.0 a 1.0)
 pygame.mixer.music.play(-1)  # -1 faz a música tocar em loop
 
 # Tente carregar as imagens
-carrega_nivel("praca.json")
+carrega_nivel("lava.json")
 
 
 # FPS

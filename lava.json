@@ -3,37 +3,15 @@
   "chao": "image/chao_fabrica.png",
   "cor_fundo": [235, 206, 135],
   "entities": [
-    
     {
-      "type": "Plane",
-      "x": [0, 1920],
+      "type": "plane",
+      "x": 1920,
       "y": [0, 360],
-      "width": 960,
-      "height": 950,
-      "speed": [1, 3],
-      "respawn": true,
+      "width": 96,
+      "height": 95,
+      "speed_x": -5,
+      "drop_y": 300,
       "image": "image/decoracao_fabrica/plane.png"
-    }, 
-    {
-      "type": "Bomb",
-      "x": [0, 1920],
-      "y": [0, 360],
-      "width": 960,
-      "height": 950,
-      "speed": [1, 3],
-      "respawn": true,
-      "image": "image/decoracao_fabrica/bomb.png"
-
-    },
-    {
-      "type": "Explosion",
-      "x": [0, 1920],
-      "y": [0, 360],
-      "width": 960,
-      "height": 950,
-      "speed": [1, 3],
-      "respawn": true,
-      "image": "image/decoracao_fabrica/explosion"
     },
     {
       "type": "bloco",
@@ -84,7 +62,7 @@
       "speed": [1, 3],
       "respawn": true,
       "image": "image/birdBlack"
-    },    
+    },
 
     {
       "type": "decoracao",
@@ -95,7 +73,7 @@
       "speed": [1, 3],
       "respawn": true,
       "image": "image/birdBlack"
-    },    
+    },
     {
       "type": "decoracao",
       "x": [0, 1920],
@@ -105,7 +83,7 @@
       "speed": [1, 3],
       "respawn": true,
       "image": "image/birdBlack"
-    },    
+    },
 
     {
       "type": "decoracao",
@@ -116,7 +94,7 @@
       "speed": [1, 3],
       "respawn": true,
       "image": "image/birdBlack"
-    },    
+    },
     {
       "type": "parallax",
       "x": 800,
@@ -141,20 +119,16 @@
       "jump_strength": -20
     },
 
-
     {
       "type": "nextlevel",
       "x": 3200,
       "y": 1010,
       "hitbox_height": -10,
-      "hitbox_y": 20,      
+      "hitbox_y": 20,
       "width": 310,
       "height": 360,
       "prescale": 0.5,
       "level": "agua.json"
-    }    
-
-
-
+    }
   ]
 }
