@@ -487,8 +487,10 @@ class Explosion(Entidade):
     def __init__(self, x, y):
         self.collides = False
         # Carregar os frames da explosão
-        frame_width = 96  # Largura desejada do frame
-        frame_height = 95  # Altura desejada do frame
+        frame_width = 1440  # Largura desejada do frame
+        frame_height = 1425  # Altura desejada do frame
+        x = 900     
+        y = 100
         super().__init__(x, y, frame_width, frame_height, "image/decoracao_fabrica/explosion")
         #self.end_frame = len(explosion_frames)
 

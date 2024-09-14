@@ -7,12 +7,50 @@
       "type": "plane",
       "x": 1920,
       "y": [0, 360],
-      "width": 96,
-      "height": 95,
+      "width": 196,
+      "height": 195,
       "speed_x": -5,
       "drop_y": 300,
       "image": "image/decoracao_fabrica/plane.png"
     },
+    {
+      "type": "parallax",
+      "x": -200,
+      "y":-200,
+      "width": 203,
+      "height": 288,
+      "layer": 0.8,
+      "image": "image/decoracao_fabrica/fabrica_3.png"
+    },
+    {
+      "type": "parallax",
+      "x": 200,
+      "y": 500,
+      "width": 960,
+      "height": 614,
+      "layer": 0.8,
+      "image": "image/decoracao_fabrica/fabrica_1.png"
+    },
+    {
+      "type": "parallax",
+      "x": 1200,
+      "y": 560,
+      "width": 520,
+      "height": 560,
+      "layer": 0.8,
+      "image": "image/decoracao_fabrica/fabrica_2.png"
+    },
+    
+    {
+      "type": "parallax",
+      "x": 2400,
+      "y": 800,
+      "width": 464,
+      "height": 252,
+      "layer": 0.8,
+      "image": "image/decoracao_fabrica/fabrica_4.png"
+    },
+
     {
       "type": "bloco",
       "x": 1000,
@@ -95,15 +133,7 @@
       "respawn": true,
       "image": "image/birdBlack"
     },
-    {
-      "type": "parallax",
-      "x": 800,
-      "y": 800,
-      "width": 464,
-      "height": 252,
-      "layer": 0.8,
-      "image": "image/decoracao_fabrica/fabrica_1.png"
-    },
+    
     {
       "type": "personagem",
       "x": 384,
@@ -117,6 +147,15 @@
       "frames_dir": "image/mario_frames/",
       "speed": 5,
       "jump_strength": -20
+    },
+    {
+      "type": "parallax",
+      "x": 384,
+      "y": 840,
+      "width": 160,
+      "height": 384,
+      "layer": 3,
+      "image": "image/decoracao_fabrica/placa_stop.png"
     },
 
     {
