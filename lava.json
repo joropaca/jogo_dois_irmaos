@@ -5,12 +5,13 @@
   "entities": [
     {
       "type": "plane",
-      "x": 1920,
-      "y": [0, 360],
+      "x": 5020,
+      "y": 100,
       "width": 196,
       "height": 195,
-      "speed_x": -5,
-      "drop_y": 300,
+      "speed_x": -10,
+      "drop_x": 3230,
+      "ativacao_x": 2900,
       "image": "image/decoracao_fabrica/plane.png"
     },
     {
@@ -157,7 +158,15 @@
       "layer": 3,
       "image": "image/decoracao_fabrica/placa_stop.png"
     },
-
+    {
+      "type": "parallax",
+      "x": 262,
+      "y": 384,
+      "width": 160,
+      "height": 384,
+      "layer": 3,
+      "image": "image/decoracao_fabrica/barril.png"
+    },
     {
       "type": "nextlevel",
       "x": 3200,

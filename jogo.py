@@ -19,11 +19,22 @@ pause_game = False
 # Definições de câmeras
 camera_x = 0
 camera_y = 0
+camera_shake_x = 0
+camera_shake_y = 0
+camera_shake = 0
 
 # Lista de entidades
 entidades = []
 personagem = None
-    
+gambiarraNextLevel = None
+
+def shake_me_up(strength):
+    global camera_shake_x, camera_shake_y, camera_shake
+
+    camera_shake_x = camera_x
+    camera_shake_y = camera_y
+    camera_shake = strength
+
 def carrega_imagem_escalada(imagem_path, width = None, height = None):
     try:
         imagem = pygame.image.load(imagem_path)
@@ -386,7 +397,8 @@ class Parallax(Entidade):
 
         #Calcula posição com base no layer
         self.x = self.start_x + (self.start_x - camera_x) * self.layer
-        self.y = self.start_y
+        self.y = self.start_y - camera_y
+        
         pass
 
     def draw(self, screen):
@@ -409,6 +421,9 @@ class OverlayTransparente(Entidade):
     def update(self):
         super().update()
 
+        if self.tempo == 0:
+            self.kill()
+
         if self.tempo > 0:
             self.tempo -= 1
         pass
@@ -422,7 +437,7 @@ class OverlayTransparente(Entidade):
                 #calcula a transparencia
                 alpha = 255 * (self.tempo / self.fadestart)
                 self.image.set_alpha(alpha)
-
+                
             screen.blit(self.image, (self.x, self.y))
         pass
 
@@ -430,20 +445,32 @@ class OverlayTransparente(Entidade):
 
 class Plane(Entidade):
 
-    def __init__(self, x, y, width, height, image, speed_x, drop_x):
+    def __init__(self, x, y, width, height, image, speed_x, drop_x, ativacao_x):
         super().__init__(x, y, width, height, image)
+        self.ativacao_x = ativacao_x
         self.speed_x = speed_x
         self.drop_x = drop_x
         self.dropped_bomb = False
         self.collides = False
+        self.hidden = True
 
     def update(self):
         global entidades
-        self.x += self.speed_x
-        if self.x < 500 and not self.dropped_bomb:
-            self.dropped_bomb = True
-            entidades.append(Bomb(self.x, self.y))
-    
+        if personagem.x > self.ativacao_x and self.hidden == True:
+            self.hidden = False
+            pygame.mixer.music.load('sons/bomba.mp3')  # Substitua pelo caminho do seu arquivo de áudio
+            pygame.mixer.music.set_volume(0.5)  # Ajuste o volume (0.0 a 1.0)
+            pygame.mixer.music.play(-1)  # -1 faz a música tocar em loop
+
+            if gambiarraNextLevel != None:
+                gambiarraNextLevel.setTrap()
+
+        if self.hidden == False:
+            self.x += self.speed_x
+            if self.x < self.drop_x and not self.dropped_bomb:
+                self.dropped_bomb = True
+                entidades.insert(0, Bomb(self.x, self.y))
+        
 
 
 class Bomb(Entidade):
@@ -454,14 +481,21 @@ class Bomb(Entidade):
         width = 337 // 5
         height = 396 // 5
         super().__init__(x, y, width, height, image)
-        self.speed_y = 5
-        self.explode_y = SCREEN_HEIGHT - FLOOR_HEIGHT - height
+        self.speed_y = 1
+        self.explode_y = SCREEN_HEIGHT - FLOOR_HEIGHT - height - 160
         self.exploded = False
         self.collides = False
 
     def update(self):
         if not self.exploded:
+            global camera_shake_x
+            global camera_shake_y
             gonnaExplode = False
+            shake_me_up(5)
+            camera_shake_x = self.x - SCREEN_WIDTH / 2
+            camera_shake_y = self.y  - SCREEN_HEIGHT / 2
+            if camera_shake_y > 0:
+                camera_shake_y = 0
 
             #Testar colisoes
             #if self.has_collision(self.x, self.y + self.speed_y):
@@ -475,11 +509,11 @@ class Bomb(Entidade):
             else:
                 self.exploded = True
                 # cria imagem branca
+                pygame.mixer.music.fadeout(1500)
                 white = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
-                white.fill((255, 255, 255))
-
-                entidades.append(Explosion(self.x, self.y))
-                entidades.append(OverlayTransparente(0,0,1920,1080,white, 100))
+                white.fill((255, 255, 255))            
+                entidades.append(OverlayTransparente(0,0,1920,1080,white, 1200))    
+                entidades.insert(entidades.index(personagem), Explosion(self.x, self.y))
                 self.kill()
         
 
@@ -487,13 +521,24 @@ class Explosion(Entidade):
     def __init__(self, x, y):
         self.collides = False
         # Carregar os frames da explosão
-        frame_width = 1440  # Largura desejada do frame
-        frame_height = 1425  # Altura desejada do frame
-        x = 900     
-        y = 100
-        super().__init__(x, y, frame_width, frame_height, "image/decoracao_fabrica/explosion")
-        #self.end_frame = len(explosion_frames)
+        frame_width = 1 #SCREEN_WIDTH//2  # Largura desejada do frame
+        frame_height = 1 #SCREEN_HEIGHT//2  # Altura desejada do frame
+        self.x = x - frame_width // 2
+        y = SCREEN_HEIGHT - frame_height
+        self.contador = 0
+        super().__init__(self.x, y, frame_width, frame_height, "image/decoracao_fabrica/explosion/explosion_3.png")
+        
+    def update(self):
+        
+        if self.contador > 150:
+            carrega_nivel("agua.json")
+            white = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
+            white.fill((255, 255, 255))            
+            entidades.append(OverlayTransparente(0,0,1920,1080,white, 50))  
 
+        self.contador +=1
+        return super().update()
+    
 
 
 class NextLevel(Entidade):
@@ -503,17 +548,24 @@ class NextLevel(Entidade):
         imagem_tubo = "image/cano.png"
         super().__init__(x, y, width, height, imagem_tubo)
         self.collides = True
+        self.isTrap = False
         
         self.level = level
 
-    def update(self):
-        if keys[pygame.K_DOWN]:
-            temp_y = self.y
-            self.y-=100
-            if self.collides_with(personagem):
-                carrega_nivel(self.level)
+    def setTrap(self):
+        self.image = carrega_imagem_escalada("image/canotrap.png", self.width, self.height)
+        self.isTrap = True
+        shake_me_up(50)
 
-            self.y = temp_y
+    def update(self):
+        if self.isTrap == False:
+            if keys[pygame.K_DOWN]:
+                temp_y = self.y
+                self.y-=100
+                if self.collides_with(personagem):
+                    carrega_nivel(self.level)
+
+                self.y = temp_y
                 
         #pass
 
@@ -523,7 +575,12 @@ class NextLevel(Entidade):
         pass
 
 def carrega_nivel(arquivo):
-    global entidades, chao_img, cor_fundo, camera_x, camera_y, fundo_img, fonte, explosion_frames
+    global entidades, chao_img, cor_fundo, camera_x, camera_y, fundo_img, fonte, camera_x, camera_y, camera_shake
+    
+    pygame.mixer.music.load('sons/musica.mp3')  # Substitua pelo caminho do seu arquivo de áudio
+    pygame.mixer.music.set_volume(0.5)  # Ajuste o volume (0.0 a 1.0)
+    pygame.mixer.music.play(-1)  # -1 faz a música tocar em loop
+    camera_shake = 0
     camera_x = 0
     camera_y = 0    
     # Abre arquivo json do mapa
@@ -568,9 +625,11 @@ def carrega_nivel(arquivo):
                 entidades.append(Parallax(x,y,width,height, entity["image"], entity["layer"] or 0))
             
             case "nextlevel":
+                global gambiarraNextLevel
                 nextlevel = NextLevel(x,y,width,height, entity["level"])
                 nextlevel.read_hitbox_offset_from_json(entity)
                 entidades.append(nextlevel)
+                gambiarraNextLevel = nextlevel
 
             case "personagem":
                 # exceção para o tipo personagem: declara a variavel global
@@ -587,7 +646,7 @@ def carrega_nivel(arquivo):
                 entidades.append(Bloco(x, y, width, height, entity["image"], entity["texto"]))
 
             case "plane":                
-                entidades.append(Plane(x, y, width, height, entity["image"], entity["speed_x"], entity["drop_y"]))
+                entidades.append(Plane(x, y, width, height, entity["image"], entity["speed_x"], entity["drop_x"], entity["ativacao_x"]))
 
             case "overlay":                
                 entidades.append(OverlayTransparente(x, y, width, height, entity["image"], entity["tempo"]))
@@ -595,6 +654,7 @@ def carrega_nivel(arquivo):
 
     # Closing file
     f.close()
+    #shake_me_up(100)
 
 def desenha_fundo():
     screen.fill(cor_fundo)
@@ -651,8 +711,16 @@ while True:
     if keys[pygame.K_SPACE]:
         personagem.jump()
     
+
     # Atualiza a posição da câmera
     camera_x += (personagem.x - camera_x - CAMERA_TARGET_X ) * 0.05
+
+    if camera_shake > 0:
+        camera_x = camera_shake_x + random.uniform(-camera_shake, camera_shake)
+        camera_y = camera_shake_y + random.uniform(-camera_shake, camera_shake)
+        if camera_y > 0: 
+            camera_y = -camera_y
+        camera_shake -= 1 
 
     # Ajusta a posição do fundo para criar um efeito de movimento
     background_x = -camera_x % SCREEN_WIDTH
