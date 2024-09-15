@@ -4,6 +4,7 @@ import os
 import random 
 import json
 import tkinter as tk
+from pygame import gfxdraw
 
 # Inicialize o Pygame e o mixer
 pygame.init()
@@ -39,7 +40,7 @@ def carrega_imagem_escalada(imagem_path, width = None, height = None):
     try:
         imagem = pygame.image.load(imagem_path)
         if width == None or height == None:
-            return imagem
+            return imagem 
         return pygame.transform.scale(imagem, (width, height))
     except pygame.error as e:
         print(f"Erro ao carregar imagens: {e}")
@@ -65,6 +66,23 @@ def random_se_list(valor):
         return random.uniform(valor[0], valor[1])
     return valor
 
+def render_multi_line(text):
+    imagens = []
+    lines = text.splitlines()
+    
+    for i, linha in enumerate(lines):
+        imagens.append(fonte.render(linha, True, cor_texto))
+
+    max_width = max([img.get_width() for img in imagens])
+    total_height = sum([img.get_height() for img in imagens])
+    gap = 10
+    text_img = pygame.Surface((max_width, total_height + gap * (len(imagens) - 1)), pygame.SRCALPHA)
+    y_offset = 0
+    for img in imagens:
+        center_x = max_width // 2 - img.get_width() // 2
+        text_img.blit(img, (center_x, y_offset))
+        y_offset += img.get_height() + gap
+    return text_img
 
 class Entidade:
     hitbox_offset = pygame.Rect(0, 0, 0, 0)
@@ -102,8 +120,8 @@ class Entidade:
         if not self.hidden:
             screen.blit(self.image, (self.x - camera_x, self.y - camera_y))
             # Desenha as linhas da hitbox 
-            hitbox = self.get_final_hitbox()
-            pygame.draw.rect(screen, (255, 0, 0), hitbox, 2)
+            #hitbox = self.get_final_hitbox()
+            #pygame.draw.rect(screen, (255, 0, 0), hitbox, 2)
     
     def read_hitbox_offset_from_json(self, entity):        
         hitbox_x = entity["hitbox_x"] if "hitbox_x" in entity else  0
@@ -189,9 +207,11 @@ class Personagem(Entidade):
     facing_right = True  # Armazenar a direção que o personagem está virado
     novo_x = 0
     novo_y = 0
+    isDead = False
 
     def __init__(self, x, y, width, height, frames_dir, speed, jump_strength):
         self.personagem_frames = carrega_frames_dir(frames_dir, width, height)
+        self.deadImage = carrega_imagem_escalada("image/mariodead.png", width, height)
         super().__init__(x, y, width, height, self.personagem_frames[0])
         self.novo_x = x
         self.novo_y = y
@@ -207,8 +227,14 @@ class Personagem(Entidade):
 
         # Carregar o som do pulo
         self.jump_sound = pygame.mixer.Sound('sons/pulo.mp3')  # Substitua pelo caminho do seu arquivo de áudio
-
+        
     def update(self):
+        
+        if self.isDead == True:
+            self.image = self.deadImage
+            return
+        
+        
         self.moving = False
         self.novo_y = self.y
         if self.is_jumping:
@@ -273,21 +299,110 @@ class Personagem(Entidade):
             self.y = self.novo_y
 
     def move_left(self):
+        if self.isDead == True:
+            return         
         self.novo_x = self.x - self.speed
         self.moving = True
         self.facing_right = False 
     
     def move_right(self):
+        if self.isDead == True:
+            return         
         self.novo_x = self.x + self.speed
         self.moving = True
         self.facing_right = True
 
     def jump(self):  
+        #self.die()
+        #return
+        if self.isDead == True:
+            return         
         if self.on_ground:
             self.velocity_y = self.jump_strength
             self.is_jumping = True
             self.on_ground = False
             self.jump_sound.play()  # Tocar efeito sonoro
+
+    def die(self):
+        if self.isDead == False:
+            self.isDead = True
+            entidades.append(Particles(personagem.x, personagem.y, personagem.width, personagem.height))
+            
+
+class Particle():
+    x: float
+    y: float
+    speed_x: float
+    speed_y: float
+    end_y: float
+    delay: float
+    
+    def __init__(self, x, y, delay):
+        self.delay = delay
+        self.x = x 
+        self.y = y 
+        self.speed_x = random.uniform(-5,5)
+        self.speed_y = -random.uniform(5, 20)
+        self.end_y = SCREEN_HEIGHT - random.uniform(0, FLOOR_HEIGHT)
+
+    def update(self):
+        if self.delay > 0:
+            self.delay -= 1
+            return
+        
+        if(self.y < self.end_y) or self.speed_y < 0:
+            self.speed_y += 0.2
+            self.x += self.speed_x
+            self.y += self.speed_y
+
+    def draw(self):
+        if self.delay > 0:
+            return
+        
+        color = (255,0,0)
+        pos = (self.x - camera_x, self.y - camera_y )
+        screen.fill(color, (pos, (2,2)))
+
+
+class ParticleSprite(Particle):
+    def __init__(self, x, y, delay, imagem):
+        super().__init__(x,y,delay)
+        self.imagem = carrega_imagem_escalada(imagem)
+
+    def draw(self):
+        if self.delay > 0:
+            return
+        pos = (self.x - camera_x, self.y - camera_y )
+        screen.blit(self.imagem, pos)
+
+
+class Particles(Entidade):
+    particles: Particle = []
+
+    def __init__(self, x, y, width, height):
+        super().__init__(x, y, 0, 0, None)
+        for i in range(10000):
+            
+            self.particles.append(Particle(x + random.uniform(120, 130 ),random.uniform(y+90, y+ 120), random.uniform(0, 100)))
+        
+        self.particles.append(ParticleSprite(personagem.x+50,personagem.y+50, 0, "image/cabecamario.png"))
+    
+    def update(self):
+        for particle in self.particles:
+            particle.update()
+
+
+    def draw(self, screen):
+        pass
+            
+    
+    def draw_postprocess(self, screen):
+        for particle in self.particles:
+            particle.draw()
+        pass
+
+
+
 
 class Bloco(Entidade):
     tempo_espera = 0
@@ -307,27 +422,10 @@ class Bloco(Entidade):
                 self.show_text = False
         pass
 
-    def render_multi_line(self, text):
-        imagens = []
-        lines = text.splitlines()
-        
-        for i, linha in enumerate(lines):
-            imagens.append(fonte.render(linha, True, cor_texto))
-
-        max_width = max([img.get_width() for img in imagens])
-        total_height = sum([img.get_height() for img in imagens])
-        gap = 10
-        text_img = pygame.Surface((max_width, total_height + gap * (len(imagens) - 1)), pygame.SRCALPHA)
-        y_offset = 0
-        for img in imagens:
-            center_x = max_width // 2 - img.get_width() // 2
-            text_img.blit(img, (center_x, y_offset))
-            y_offset += img.get_height() + gap
-        return text_img
 
     def make_text(self):
         # Monta caixa de texto
-        rendered_text = self.render_multi_line(self.texto)
+        rendered_text = render_multi_line(self.texto)
         self.text_img  = pygame.transform.scale(self.fundo_texto, (rendered_text.get_width() + 100, rendered_text.get_height() + 100))
         self.text_img.blit(rendered_text, (50, 50))
         self.text_rect = self.text_img.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
@@ -568,11 +666,102 @@ class NextLevel(Entidade):
                 self.y = temp_y
                 
         #pass
-
-
-
     def draw_postprocess(self, screen):
         pass
+
+class Boss(Entidade):
+    tempo_espera = 0
+    textos = "Você bateu no bloco!"
+    creditos = "Desenvolvedor: Igor Ascoli\nDesign: Vitor Adriano Johann\nPesquisa: Betina Bock\n          Guilherme Baum\n\n\n\nFim"
+    show_text = False
+
+    def __init__(self, x, y, width, height, image_path, textos, gatilho_x):
+        super().__init__(x, y, width, height, image_path)
+        self.collides = False
+        self.fim = False
+        self.textos = textos
+        self.gatilho_x = gatilho_x
+        self.last_gatilho = 0
+        self.tempolaser = 0
+        self.delaytchau = 0
+        self.tchau = False
+        self.fundo_texto = carrega_imagem_escalada('image/fundo_texto.png')
+        self.make_text()
+
+    def update(self):
+        if self.tchau == True:
+            self.x += 1
+                
+
+        if self.delaytchau > 0:
+            self.delaytchau -= 1
+            if self.delaytchau == 0:
+                self.faz_tchau()
+
+        if camera_x + SCREEN_WIDTH > self.x + self.width:
+            self.x = camera_x + SCREEN_WIDTH - self.width
+
+        novo_gatilho = personagem.x // self.gatilho_x
+        if novo_gatilho > self.last_gatilho:
+            
+            self.last_gatilho = novo_gatilho
+            
+            if novo_gatilho  > len(self.textos):
+                if self.fim == False:
+                    self.fim = True
+                    self.tempolaser = 100
+                    self.delaytchau = 200
+                    personagem.die()
+            else:
+                self.make_text()                
+                self.show_text = True
+
+        if self.tempo_espera > 0:
+            self.tempo_espera -= 1
+            if self.tempo_espera == 0:
+                self.show_text = False
+        pass
+
+    def faz_tchau(self):
+        if self.tchau == False:
+            self.make_creditos()            
+            self.image = pygame.transform.flip(self.image, True, False)  # Imagem invertida
+            self.tchau = True
+            
+
+    def make_text(self):
+        # Monta caixa de texto
+        rendered_text = render_multi_line(self.textos[self.last_gatilho - 1])
+        self.text_img  = pygame.transform.scale(self.fundo_texto, (rendered_text.get_width() + 100, rendered_text.get_height() + 100))
+        self.text_img.blit(rendered_text, (50, 50))
+        self.text_rect = self.text_img.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
+
+    def make_creditos(self):
+        # Monta caixa de texto
+        rendered_text = render_multi_line(self.creditos)
+        self.text_img  = pygame.transform.scale(self.fundo_texto, (rendered_text.get_width() + 100, rendered_text.get_height() + 100))
+        self.text_img.blit(rendered_text, (50, 50))
+        self.text_rect = self.text_img.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
+
+    def draw_postprocess(self, screen):
+        global pause_game
+        if self.tchau == True:
+            screen.blit(self.text_img, self.text_rect)
+        else:
+            if self.tempolaser > 0:
+                self.tempolaser -= 1
+                start_pos = (self.x - camera_x + 10, self.y - camera_y + 116)
+                for i in range(10):                
+                    end_pos = (personagem.x + 120 - camera_x + random.uniform(-10,10), personagem.y + 120 - camera_y + random.uniform(-10,10))
+                    color = (0, random.uniform(192,255), random.uniform(225,255))
+                    pygame.draw.line(screen, color, start_pos, end_pos, random.randint(1,4))
+
+            else: 
+                if self.show_text and self.tempo_espera == 0:
+                    screen.blit(self.text_img, self.text_rect)
+                    self.tempo_espera = 10
+                    pause_game = True
+
 
 def carrega_nivel(arquivo):
     global entidades, chao_img, cor_fundo, camera_x, camera_y, fundo_img, fonte, camera_x, camera_y, camera_shake
@@ -645,6 +834,9 @@ def carrega_nivel(arquivo):
             case "bloco":                
                 entidades.append(Bloco(x, y, width, height, entity["image"], entity["texto"]))
 
+            case "boss":                
+                entidades.append(Boss(x, y, width, height, entity["image"], entity["falas"], entity["gatilho_x"]))
+
             case "plane":                
                 entidades.append(Plane(x, y, width, height, entity["image"], entity["speed_x"], entity["drop_x"], entity["ativacao_x"]))
 
@@ -678,8 +870,10 @@ SCREEN_HEIGHT = 1080
 FLOOR_HEIGHT = 70
 CAMERA_TARGET_X = SCREEN_WIDTH // 5
 CAMERA_TARGET_Y = SCREEN_HEIGHT - 200
+
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Jogo 2D com Pulo")
+print(pygame.display.Info())
 
 # Carregar música de fundo
 pygame.mixer.music.load('sons/musica.mp3')  # Substitua pelo caminho do seu arquivo de áudio
@@ -687,6 +881,7 @@ pygame.mixer.music.set_volume(0.5)  # Ajuste o volume (0.0 a 1.0)
 pygame.mixer.music.play(-1)  # -1 faz a música tocar em loop
 
 # Tente carregar as imagens
+#carrega_nivel("boss.json")
 carrega_nivel("praca.json")
 
 
