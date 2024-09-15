@@ -672,7 +672,7 @@ class NextLevel(Entidade):
 class Boss(Entidade):
     tempo_espera = 0
     textos = "Você bateu no bloco!"
-    creditos = "Desenvolvedor: Igor Ascoli\nDesign: Vitor Adriano Johann\nPesquisa: Betina Bock\n          Guilherme Baum\n\n\n\nFim"
+    creditos = "Desenvolvedor: Igor Ascoli\nDesign: Vitor Adriano Johann\nPesquisa: Betina Bock\n          Guilherme Baum\nReferências: readme.txt\n\n\n\nFim"
     show_text = False
 
     def __init__(self, x, y, width, height, image_path, textos, gatilho_x):
@@ -881,8 +881,8 @@ pygame.mixer.music.set_volume(0.5)  # Ajuste o volume (0.0 a 1.0)
 pygame.mixer.music.play(-1)  # -1 faz a música tocar em loop
 
 # Tente carregar as imagens
-#carrega_nivel("boss.json")
-carrega_nivel("praca.json")
+carrega_nivel("boss.json")
+#carrega_nivel("praca.json")
 
 
 # FPS

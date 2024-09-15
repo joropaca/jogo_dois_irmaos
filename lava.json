@@ -169,7 +169,7 @@
       "hitbox_width": -70,
       "hitbox_height": -40,
       "frames_dir": "image/mario_frames/",
-      "speed": 5,
+      "speed": 10,
       "jump_strength": -20
     },
     {
