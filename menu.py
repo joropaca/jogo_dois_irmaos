@@ -25,7 +25,7 @@ pygame.mixer.music.play(-1)  # -1 faz a m�sica tocar em loop
 # Carregar efeitos sonoros
 efeito_iniciar = pygame.mixer.Sound('sons/play.mp3')  # Substitua pelo caminho do seu arquivo de efeito sonoro
 efeito_sair = pygame.mixer.Sound('sons/sair.mp3')  # Substitua pelo caminho do seu arquivo de efeito sonoro
-efeito_navegacao = pygame.mixer.Sound('sons/play.mp3')
+#efeito_navegacao = pygame.mixer.Sound('sons/play.mp3')
 
 # Carregar imagem de fundo
 fundo = pygame.image.load('image/fundo_menu.png')
@@ -87,14 +87,14 @@ def menu_jogo():
                 sys.exit()
             if evento.type == pygame.KEYDOWN:
                 if evento.key == pygame.K_UP:  # Se a tecla para cima for pressionada
-                    efeito_navegacao.play()
+                    #efeito_navegacao.play()
                     if selecionado == 'iniciar':
                         efeito_iniciar.play()  # Tocar efeito sonoro
                         jogo_script = os.path.join(os.path.dirname(__file__), 'jogo.py')
                         subprocess.Popen(['python', jogo_script])
                     selecionado = 'iniciar'
                 elif evento.key == pygame.K_DOWN:  # Se a tecla para baixo for pressionada
-                    efeito_navegacao.play()
+                    #efeito_navegacao.play()
                     if selecionado == 'sair':
                         efeito_sair.play()  # Tocar efeito sonoro
                         pygame.quit()

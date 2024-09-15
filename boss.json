@@ -1,0 +1,42 @@
+{
+    "fonte": "fonte.ttf",
+    "chao": "image/chao_boss.png",
+    "cor_fundo": [0, 0, 0],
+
+    "entities": [
+        
+        {
+            "type": "parallax",
+            "x": 600,
+            "y": 450,
+            "width": 1600,
+            "height": 900,
+            "layer": 1,
+            "image": "image/rodrigo.png"
+        },
+        {
+            "type": "personagem",
+            "x": 384,
+            "y": 880,
+            "width": 200,
+            "height": 200,
+            "hitbox_x": 40,
+            "hitbox_y": 40,
+            "hitbox_width": -70,
+            "hitbox_height": -40,
+            "frames_dir": "image/mario_frames/",
+            "speed": 5,
+            "jump_strength": -20
+          },
+          {
+            "type": "parallax",
+            "x": 300,
+            "y": 450,
+            "width": 1600,
+            "height": 900,
+            "layer": 1,
+            "image": "image/grupo.png"
+          }
+    ]
+
+}

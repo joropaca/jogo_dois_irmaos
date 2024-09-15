@@ -687,7 +687,7 @@ pygame.mixer.music.set_volume(0.5)  # Ajuste o volume (0.0 a 1.0)
 pygame.mixer.music.play(-1)  # -1 faz a música tocar em loop
 
 # Tente carregar as imagens
-carrega_nivel("lava.json")
+carrega_nivel("praca.json")
 
 
 # FPS

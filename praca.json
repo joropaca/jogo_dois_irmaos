@@ -231,12 +231,12 @@
     },
     {
       "type": "overlay",
-      "x": 0,
-      "y": 0,
-      "width": 1920,
-      "height": 1080,
-      "tempo": 50,
-      "image": "image/2brothers/Dois_irmaos.png"
+      "x": 300,
+      "y": 300,
+      "width": 1404,
+      "height": 212,
+      "tempo": 100,
+      "image": "image/Dois_irmaos.png"
     }
   ]
 }
