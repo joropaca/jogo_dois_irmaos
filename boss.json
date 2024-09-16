@@ -1,50 +1,48 @@
 {
-    "fonte": "fonte.ttf",
-    "chao": "image/chao_boss.png",
-    "cor_fundo": [0, 0, 0],
+  "fonte": "fonte.ttf",
+  "chao": "image/chao_boss.png",
+  "cor_fundo": [0, 0, 0],
 
-    "entities": [
-        
-        {
-            "type": "boss",
-            "x": 1800,
-            "y": 1080,
-            "width": 500,
-            "height": 700,
-            "gatilho_x": 300,
-            "prescale": 0.5,
-            "image": "image/rodrigo.png",
-            "falas": [
-              "Está tudo errado",
-              "Não vi mas não gostei",
-              "Tem que colocar 1 pixel pro lado",
-              "Refaz tudo para amanhã"
-            ]
-        },
-        {
-            "type": "personagem",
-            "x": 30,
-            "y": 880,
-            "width": 200,
-            "height": 200,
-            "hitbox_x": 40,
-            "hitbox_y": 40,
-            "hitbox_width": -70,
-            "hitbox_height": -40,
-            "frames_dir": "image/mario_frames/",
-            "speed": 5,
-            "jump_strength": -20
-          },
-          {
-            "type": "parallax",
-            "x": 300,
-            "y": 1080,
-            "width": 1074,
-            "height": 455,
-            "prescale": 0.8,
-            "layer": 1,
-            "image": "image/grupo.png"
-          }
-    ]
-
+  "entities": [
+    {
+      "type": "boss",
+      "x": 1800,
+      "y": 1080,
+      "width": 500,
+      "height": 700,
+      "gatilho_x": 300,
+      "prescale": 0.5,
+      "image": "image/rodrigo.png",
+      "falas": [
+        "É... as informações estão corretas mas não teve a questão do elemento criativo",
+        "Poderiam ter ensaiado mais",
+        "Faltou as referências na apresentação",
+        "Refaz tudo para amanhã"
+      ]
+    },
+    {
+      "type": "personagem",
+      "x": 30,
+      "y": 880,
+      "width": 200,
+      "height": 200,
+      "hitbox_x": 40,
+      "hitbox_y": 40,
+      "hitbox_width": -70,
+      "hitbox_height": -40,
+      "frames_dir": "image/mario_frames/",
+      "speed": 5,
+      "jump_strength": -20
+    },
+    {
+      "type": "parallax",
+      "x": 300,
+      "y": 1080,
+      "width": 1074,
+      "height": 455,
+      "prescale": 0.8,
+      "layer": 1,
+      "image": "image/grupo.png"
+    }
+  ]
 }

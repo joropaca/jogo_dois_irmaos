@@ -3,8 +3,6 @@ import sys
 import os
 import random 
 import json
-import tkinter as tk
-from pygame import gfxdraw
 
 # Inicialize o Pygame e o mixer
 pygame.init()
@@ -368,6 +366,9 @@ class ParticleSprite(Particle):
     def __init__(self, x, y, delay, imagem):
         super().__init__(x,y,delay)
         self.imagem = carrega_imagem_escalada(imagem)
+        self.end_y = SCREEN_HEIGHT - FLOOR_HEIGHT - self.imagem.get_height() + 3
+        self.speed_x = 5
+        self.speed_y = -15
 
     def draw(self):
         if self.delay > 0:
@@ -754,6 +755,7 @@ class Boss(Entidade):
                 for i in range(10):                
                     end_pos = (personagem.x + 120 - camera_x + random.uniform(-10,10), personagem.y + 120 - camera_y + random.uniform(-10,10))
                     color = (0, random.uniform(192,255), random.uniform(225,255))
+                    shake_me_up(5)
                     pygame.draw.line(screen, color, start_pos, end_pos, random.randint(1,4))
 
             else: 
@@ -871,7 +873,7 @@ FLOOR_HEIGHT = 70
 CAMERA_TARGET_X = SCREEN_WIDTH // 5
 CAMERA_TARGET_Y = SCREEN_HEIGHT - 200
 
-screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.FULLSCREEN)
 pygame.display.set_caption("Jogo 2D com Pulo")
 print(pygame.display.Info())
 

@@ -4,7 +4,6 @@
   "cor_fundo": [235, 206, 135],
   "imagem_fundo": "image/fundo_agua.png",
   "entities": [
-  
     {
       "type": "parallax",
       "x": 1200,
@@ -50,7 +49,7 @@
       "layer": 1,
       "image": "image/decoracao_agua/pedra3.png"
     },
-    
+
     {
       "type": "decoracao",
       "x": [0, 1920],
@@ -81,7 +80,7 @@
       "respawn": true,
       "image": "image/peixe_verde"
     },
-    
+
     {
       "type": "bloco",
       "x": 1000,
@@ -89,7 +88,7 @@
       "width": 124,
       "height": 131,
       "image": "image/bloco_agua.png",
-      "texto": "Venda de produtos coloniais locais",
+      "texto": "Pontos gerais do Rio dos Sinos",
       "fonte": "fonte.ttf"
     },
     {
@@ -109,7 +108,7 @@
       "width": 124,
       "height": 131,
       "image": "image/bloco_agua.png",
-      "texto": "baixa qualidade das águas",
+      "texto": "Baixa qualidade das águas",
       "fonte": "fonte.ttf"
     },
     {
@@ -119,7 +118,7 @@
       "width": 124,
       "height": 131,
       "image": "image/bloco_agua.png",
-      "texto": "mau uso do solo e desmatamento",
+      "texto": "Mau uso do solo e desmatamento",
       "fonte": "fonte.ttf"
     },
     {
@@ -139,7 +138,7 @@
       "width": 124,
       "height": 131,
       "image": "image/bloco_agua.png",
-      "texto": "Como está a poluição no rio dos sinos",
+      "texto": "Como está a poluição no Rio dos Sinos",
       "fonte": "fonte.ttf"
     },
     {
@@ -168,13 +167,13 @@
       "x": 5800,
       "y": 1010,
       "hitbox_height": -10,
-      "hitbox_y": 20,      
+      "hitbox_y": 20,
       "width": 310,
       "height": 360,
       "prescale": 0.5,
       "level": "boss.json"
-    },  
-    
+    },
+
     {
       "type": "personagem",
       "x": 384,
@@ -253,6 +252,5 @@
       "tempo": 100,
       "image": "image/vale.png"
     }
-    
   ]
 }
